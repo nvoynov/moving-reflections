@@ -14,7 +14,6 @@ body, html {
   user-select: none;
 }
 
-/* Основной контейнер в оконном режиме */
 #app {
   display: flex;
   flex-direction: column;
@@ -24,7 +23,7 @@ body, html {
   padding: 32px 12vw 52px 12vw;
 }
 
-/* Шапка в 3 строки */
+/* Шапка */
 #header {
   flex-shrink: 0;
   width: 100%;
@@ -51,7 +50,7 @@ body, html {
 .header-subtitle {
   font-size: 13px;
   font-weight: 300;
-  letter-spacing: 0.16em;
+  letter-spacing: 0.14em;
   color: #cccccc;
   margin-bottom: 18px;
 }
@@ -64,16 +63,115 @@ body, html {
   background-color: rgba(255, 255, 255, 0.14);
 }
 
-/* Горизонтальный блок управления в обычном режиме */
+/* Панель управления в оконном режиме */
 #controls {
   flex-shrink: 0;
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: center;
+  flex-wrap: wrap;
   gap: 24px;
   margin-bottom: 22px;
   z-index: 20;
+}
+
+/* Селектор ритма */
+.rhythm-picker select {
+  appearance: none;
+  background-color: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #e5e5e5;
+  font-size: 13px;
+  letter-spacing: 0.06em;
+  padding: 8px 32px 8px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  outline: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://w3.org' viewBox='0 0 24 24' fill='none' stroke='%23cccccc' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 14px;
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+
+.rhythm-picker select:hover,
+.rhythm-picker select:focus {
+  border-color: rgba(255, 255, 255, 0.45);
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.rhythm-picker select option,
+.rhythm-picker select optgroup {
+  background-color: #363636;
+  color: #f0f0f0;
+}
+
+/* Регулятор BPM в стиле галереи */
+.tempo-picker {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background-color: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  padding: 7px 14px;
+  border-radius: 6px;
+}
+
+.tempo-label {
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  color: #a8a8a8;
+}
+
+.tempo-picker input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 96px;
+  height: 3px;
+  background: rgba(255, 255, 255, 0.25);
+  border-radius: 2px;
+  outline: none;
+  cursor: pointer;
+}
+
+.tempo-picker input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  background: #ebebeb;
+  cursor: pointer;
+  transition: transform 0.15s ease, background-color 0.15s ease;
+}
+
+.tempo-picker input[type="range"]::-webkit-slider-thumb:hover {
+  transform: scale(1.18);
+  background: #ffffff;
+}
+
+.tempo-picker input[type="range"]::-moz-range-thumb {
+  width: 13px;
+  height: 13px;
+  border: none;
+  border-radius: 50%;
+  background: #ebebeb;
+  cursor: pointer;
+}
+
+.tempo-value {
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
+  color: #e5e5e5;
+  min-width: 28px;
+  text-align: right;
+}
+
+.action-buttons {
+  display: flex;
+  align-items: center;
+  gap: 14px;
 }
 
 .icon-btn {
@@ -110,12 +208,12 @@ body, html {
   justify-content: center;
 }
 
-/* Рамка-метроном для первого такта */
+/* Вступительная рамка первого такта */
 #pulse-frame {
   position: absolute;
   width: 76%;
   height: 86%;
-  border: 1px solid rgba(255, 255, 255, 0.22);
+  border: 1.5px solid rgba(255, 255, 255, 0.25);
   pointer-events: none;
   opacity: 0;
   transition: opacity 0.2s ease, border-color 0.2s ease, background-color 0.2s ease;
@@ -123,16 +221,16 @@ body, html {
 
 #pulse-frame.beat-tick {
   opacity: 1;
-  border-color: rgba(255, 255, 255, 0.45);
+  border-color: rgba(255, 255, 255, 0.5);
 }
 
 #pulse-frame.beat-accent {
   opacity: 1;
-  border-color: rgba(255, 255, 255, 0.85);
-  background-color: rgba(255, 255, 255, 0.04);
+  border-color: rgba(255, 255, 255, 0.9);
+  background-color: rgba(255, 255, 255, 0.05);
 }
 
-/* Изображение с сохранением пропорций */
+/* Изображение с сохранением пропорций и усиленным в 2 раза акцентом сильной доли */
 #frame {
   max-width: 100%;
   max-height: 100%;
@@ -140,8 +238,15 @@ body, html {
   height: auto;
   object-fit: contain;
   display: block;
+  border: 2px solid transparent;
   box-shadow: 0 18px 45px rgba(0, 0, 0, 0.35);
-  transition: opacity 0.2s ease;
+  transition: opacity 0.15s ease, border-color 0.15s ease, filter 0.15s ease;
+}
+
+/* Усиленный в 2 раза акцент сильной доли: рамка 2px (0.75) + яркость +9% */
+#frame.strong-beat {
+  border-color: rgba(255, 255, 255, 0.75);
+  filter: brightness(1.09);
 }
 
 #frame.hidden-during-intro {
@@ -150,7 +255,6 @@ body, html {
 
 /* =========================================================
    ПОЛНОЭКРАННЫЙ РЕЖИМ
-   Сверху отступ 6vh (в 1.5 раза больше), снизу тяжелее — 8.5vh
    ========================================================= */
 :fullscreen #app {
   padding: 6vh 10vw 8.5vh 10vw;
@@ -160,7 +264,6 @@ body, html {
   display: none;
 }
 
-/* Вертикальная панель справа строго на одном уровне с верхним краем рабочей области (6vh) */
 :fullscreen #controls {
   position: fixed;
   top: 6vh;
@@ -174,4 +277,14 @@ body, html {
 
 :fullscreen #controls:hover {
   opacity: 1;
+}
+
+:fullscreen .rhythm-picker,
+:fullscreen .tempo-picker {
+  display: none;
+}
+
+:fullscreen .action-buttons {
+  flex-direction: column;
+  gap: 20px;
 }
